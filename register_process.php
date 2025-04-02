@@ -11,32 +11,40 @@
         if (!empty($username) && !empty($password))
         {
             if ($password == $confirm_password)
-            {
-                $check_username = "SELECT count(`username`) as count FROM users WHERE `username` = '$username'";
-
-                $row = mysqli_fetch_array(mysqli_query($con, $check_username));
-                if ($row['count'] > 0) 
+            {   
+                if (strlen($password) > 9 && strlen($password) < 255)
                 {
-                    echo "Username already taken!";
-                }   
+                    $check_username = "SELECT count(`username`) as count FROM users WHERE `username` = '$username'";
+
+                    $row = mysqli_fetch_array(mysqli_query($con, $check_username));
+                    if ($row['count'] > 0) 
+                    {
+                        echo "Username already taken!";
+                    }   
+                    else 
+                    {
+                        $query = "INSERT INTO `users` 
+                            (
+                                `username`, 
+                                `password`
+                            ) 
+                            VALUES 
+                            (
+                                '$username', 
+                                '$password'
+                            )";
+
+                        mysqli_query($con, $query);
+                        
+                        echo "You are succesfuly register </br>";
+                        echo "<a href='index.php'> Login here</a>";
+                    }
+                }
                 else 
                 {
-                    $query = "INSERT INTO `users` 
-                          (
-                            `username`, 
-                            `password`
-                          ) 
-                          VALUES 
-                          (
-                            '$username', 
-                            '$password'
-                          )";
-
-                    mysqli_query($con, $query);
-                    
-                    echo "You are succesfuly register </br>";
-                    echo "<a href='index.php'> Login here</a>";
+                    echo "Password must be minumum of 8 and maximum of 255";
                 }
+                
             }       
             else 
             {
