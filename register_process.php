@@ -3,7 +3,7 @@
 
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $confirm_password = $_POST['confirm-password'];
+    $confirm_password = $_POST['confirm_password'];
     $register_btn = $_POST['register_btn'];
     
     if ($register_btn)
@@ -12,7 +12,16 @@
         {
             if ($password == $confirm_password)
             {
-                $query = "INSERT INTO `users` 
+                $check_username = "SELECT count(`username`) as count FROM users WHERE `username` = '$username'";
+
+                $row = mysqli_fetch_array(mysqli_query($con, $check_username));
+                if ($row['count'] > 0) 
+                {
+                    echo "Username already taken!";
+                }   
+                else 
+                {
+                    $query = "INSERT INTO `users` 
                           (
                             `username`, 
                             `password`
@@ -23,10 +32,11 @@
                             '$password'
                           )";
 
-                mysqli_query($con, $query);
-                
-                echo "You are succesfuly register </br>";
-                echo "<a href='index.php'> Login here</a>";
+                    mysqli_query($con, $query);
+                    
+                    echo "You are succesfuly register </br>";
+                    echo "<a href='index.php'> Login here</a>";
+                }
             }       
             else 
             {

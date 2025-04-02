@@ -12,7 +12,7 @@
         <label for="password">Password</label>
         <input type="password" name="password" placeholder="Enter password">
         <label for="password">Password</label>
-        <input type="password" name="confirm-password" placeholder="Confirm password">
+        <input type="password" name="confirm_password" placeholder="Confirm password">
         <input type="submit" name="register_btn" value="Register"> 
         <a href="index.php">Do you have an existing account?</a>
     </form> 

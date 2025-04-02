@@ -6,7 +6,7 @@
     <title>Robucks - Login</title>
 </head>
 <body>
-    <form action="login.php" method="POST">
+    <form action="login_process.php" method="POST">
         <label for="username">Username</label>
         <input type="text" name="username" placeholder="Enter username">
         <label for="password">Password</label>
