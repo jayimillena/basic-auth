@@ -33,19 +33,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             die("Connection failed: " . $conn->connect_error);
         }
 
-        // Insert user into database
-        $stmt = $conn->prepare("INSERT INTO users (username, password, name) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $username, $hashed_password, $name);
+        $stmt_select = $conn->prepare("SELECT username FROM users WHERE username = ?");
+        $stmt_select->bind_param("s", $username);
+        $stmt_select->execute();
+        $stmt_select->store_result();
 
-        if ($stmt->execute()) {
-            $_SESSION['message'] = "Registration successful! Please log in.";
-            header("Location: index.php");
-            exit();
+        if ($stmt_select->num_rows > 0)  {
+            $errors[] = "Username is already taken";
         } else {
-            $errors[] = "Something went wrong. Try again.";
+            $stmt = $conn->prepare("INSERT INTO users (username, password, name) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $username, $hashed_password, $name);
+
+            if ($stmt->execute()) {
+                $_SESSION['message'] = "Registration successful! Please log in.";
+                header("Location: index.php");
+                exit();
+            } else {
+                $errors[] = "Something went wrong. Try again.";
+            }
+
+            $stmt->close();
         }
 
-        $stmt->close();
+        $stmt_select->close();
         $conn->close();
     }
 }
